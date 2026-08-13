@@ -1,4 +1,4 @@
-package com.gr.aureabank.entity;
+package com.gr.aureabank.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

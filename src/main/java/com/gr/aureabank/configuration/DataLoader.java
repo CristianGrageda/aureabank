@@ -4,10 +4,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.gr.aureabank.repository.AccountMovementRepository;
-import com.gr.aureabank.repository.AccountRepository;
-import com.gr.aureabank.repository.TransactionRepository;
-import com.gr.aureabank.repository.UserRepository;
+import com.gr.aureabank.repositories.AccountMovementRepository;
+import com.gr.aureabank.repositories.AccountRepository;
+import com.gr.aureabank.repositories.TransactionRepository;
+import com.gr.aureabank.repositories.UserRepository;
 
 @Configuration
 public class DataLoader {
