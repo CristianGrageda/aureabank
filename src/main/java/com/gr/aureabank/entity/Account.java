@@ -3,6 +3,9 @@ package com.gr.aureabank.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.gr.aureabank.enums.AccountStatusEnum;
+import com.gr.aureabank.enums.CurrencyEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,9 +20,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "accounts")
 @Getter
 @Setter
+@Table(name = "accounts")
 public class Account {
 
 	@Id
@@ -41,11 +44,11 @@ public class Account {
     
     @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false)
-    private Currency currency;
+    private CurrencyEnum currency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private AccountStatus status;
+    private AccountStatusEnum status;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

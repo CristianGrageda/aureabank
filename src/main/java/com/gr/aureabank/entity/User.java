@@ -2,6 +2,8 @@ package com.gr.aureabank.entity;
 
 import java.time.LocalDateTime;
 
+import com.gr.aureabank.enums.UserStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,9 +16,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table(name = "users")
 public class User {
 	
 	@Id
@@ -40,13 +42,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private UserStatus status;
+    private UserStatusEnum status;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    // Constructor vacío requerido por JPA
-    public User() {}
 
 	@Override
 	public String toString() {
