@@ -1,25 +1,25 @@
 package com.gr.aureabank.configuration;
 
+import com.gr.aureabank.entities.User;
+import com.gr.aureabank.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.gr.aureabank.repositories.AccountMovementRepository;
-import com.gr.aureabank.repositories.AccountRepository;
-import com.gr.aureabank.repositories.TransactionRepository;
-import com.gr.aureabank.repositories.UserRepository;
 
 @Configuration
 public class DataLoader {
 
     @Bean
-    CommandLineRunner testRepository(UserRepository userRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, AccountMovementRepository accountMovementRepository) {
+    CommandLineRunner testRepository(SecurityBeansConfig config, UserRepository userRepository) {
         return args -> {
-            System.out.println("=== DATA ===");
-            userRepository.findAll().forEach(System.out::println);
-            accountRepository.findAll().forEach(System.out::println);
-            transactionRepository.findAll().forEach(System.out::println);
-            accountMovementRepository.findAll().forEach(System.out::println);
+            /*
+            User user1 = userRepository.findById(1L).orElse(new User());
+            User user2 = userRepository.findById(2L).orElse(new User());
+            user1.setPasswordHash(config.passwordEncoder().encode("1234"));
+            user2.setPasswordHash(config.passwordEncoder().encode("4321"));
+            userRepository.save(user1);
+            userRepository.save(user2);
+             */
         };
     }
 }
