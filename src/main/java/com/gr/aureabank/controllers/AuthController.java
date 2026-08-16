@@ -40,4 +40,10 @@ public class AuthController {
 
         return new LoginResponse(token);
     }
+
+    // TODO: Crear endpoint para registrar un nuevo usuario
+    @PostMapping("/register")
+    public String register() {
+        return null;
+    }
 }

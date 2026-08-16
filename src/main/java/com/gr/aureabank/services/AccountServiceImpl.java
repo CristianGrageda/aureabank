@@ -3,6 +3,7 @@ package com.gr.aureabank.services;
 import com.gr.aureabank.dtos.AccountDto;
 import com.gr.aureabank.entities.Account;
 import com.gr.aureabank.repositories.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,16 @@ public class AccountServiceImpl implements AccountService {
         return repository.findAllByUserId(id).stream().map(this::toAccountDto).collect(Collectors.toList());
     }
 
+    @Override
+    public AccountDto findByIdAndUser(Long id, Long userId) {
+        Account account = repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new EntityNotFoundException("Cuenta no encontrada"));
+        return toAccountDto(account);
+    }
+
     private AccountDto toAccountDto(Account account) {
         AccountDto accountDto = new AccountDto();
+        accountDto.setId(account.getId());
         accountDto.setBalance(account.getBalance());
         accountDto.setCurrency(account.getCurrency());
         accountDto.setStatus(account.getStatus());
