@@ -2,8 +2,11 @@ package com.gr.aureabank.controllers;
 
 import com.gr.aureabank.dtos.LoginRequest;
 import com.gr.aureabank.dtos.LoginResponse;
+import com.gr.aureabank.dtos.UserDto;
+import com.gr.aureabank.dtos.UserRequest;
 import com.gr.aureabank.security.UserMain;
 import com.gr.aureabank.services.JwtService;
+import com.gr.aureabank.services.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +23,16 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final UserService service;
 
     public AuthController(AuthenticationManager authenticationManager,
                           UserDetailsService userDetailsService,
-                          JwtService jwtService) {
+                          JwtService jwtService,
+                          UserService service) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.service = service;
     }
 
     @PostMapping("/login")
@@ -39,5 +45,10 @@ public class AuthController {
         String token = jwtService.generateToken((UserMain) userDetails);
 
         return new LoginResponse(token);
+    }
+
+    @PostMapping("/register")
+    public UserDto register(@RequestBody UserRequest userRequest) {
+        return service.createUser(userRequest);
     }
 }

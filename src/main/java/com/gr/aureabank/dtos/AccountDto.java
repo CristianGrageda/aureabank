@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class AccountDto {
+    private Long id;
+    private String cbu;
+    private String alias;
     private BigDecimal balance;
     private CurrencyEnum currency;
     private AccountStatusEnum status;
