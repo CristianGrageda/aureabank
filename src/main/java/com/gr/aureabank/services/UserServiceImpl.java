@@ -6,6 +6,7 @@ import com.gr.aureabank.dtos.UserRequest;
 import com.gr.aureabank.entities.User;
 import com.gr.aureabank.enums.UserStatusEnum;
 import com.gr.aureabank.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,11 +18,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final SecurityBeansConfig config;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repository, SecurityBeansConfig config) {
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
-        this.config = config;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,16 +31,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserRequest user) {
-        User newUser = new User();
-        newUser.setDni(user.getDni());
-        newUser.setEmail(user.getEmail());
-        newUser.setPasswordHash(config.passwordEncoder().encode(user.getPassword()));
-        newUser.setCreatedAt(LocalDateTime.now());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setStatus(UserStatusEnum.ACTIVE);
-        return toDto(repository.save(newUser));
+    public UserDto createUser(UserRequest userRequest) {
+        if (repository.findByEmail(userRequest.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("El email ya está registrado");
+        }
+        User user = new User();
+        user.setDni(userRequest.getDni());
+        user.setEmail(userRequest.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(userRequest.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setStatus(UserStatusEnum.ACTIVE);
+        return toDto(repository.save(user));
     }
 
     private UserDto toDto(User user){
