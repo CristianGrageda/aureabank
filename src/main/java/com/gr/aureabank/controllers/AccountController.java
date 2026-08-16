@@ -2,13 +2,12 @@ package com.gr.aureabank.controllers;
 
 import com.gr.aureabank.dtos.AccountDto;
 import com.gr.aureabank.dtos.AccountMovementDto;
+import com.gr.aureabank.dtos.AccountRequest;
+import com.gr.aureabank.entities.Account;
 import com.gr.aureabank.security.UserMain;
 import com.gr.aureabank.services.AccountService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +18,11 @@ public class AccountController {
 
     public AccountController(AccountService service) {
         this.service = service;
+    }
+
+    @PostMapping
+    public AccountDto createAccount(@RequestBody AccountRequest account, @AuthenticationPrincipal UserMain userMain) {
+        return service.createAccount(account, userMain.getUser().getId());
     }
 
     @GetMapping
