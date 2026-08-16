@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
@@ -31,6 +33,20 @@ public class TransactionServiceImpl implements TransactionService{
         this.movementRepository = movementRepository;
     }
 
+    @Override
+    public List<TransactionDto> findAllByUser(Long userId) {
+        return transactionRepository.findAllByUserId(userId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public TransactionDto findByIdAndUser(Long id, Long userId) {
+        Transaction transaction = transactionRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new EntityNotFoundException("Transacción no encontrada"));
+        return toDto(transaction);
+    }
 
     @Override
     @Transactional
@@ -101,6 +117,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     private TransactionDto toDto(Transaction transaction) {
         TransactionDto dto = new TransactionDto();
+        dto.setId(transaction.getId());
         dto.setAmount(transaction.getAmount());
         dto.setCreatedAt(transaction.getCreatedAt());
         dto.setCurrency(transaction.getCurrency());

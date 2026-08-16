@@ -1,6 +1,7 @@
 package com.gr.aureabank.controllers;
 
 import com.gr.aureabank.dtos.AccountDto;
+import com.gr.aureabank.dtos.AccountMovementDto;
 import com.gr.aureabank.security.UserMain;
 import com.gr.aureabank.services.AccountService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,12 +22,17 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<AccountDto> findAllByUser(@AuthenticationPrincipal UserMain userMain){
+    public List<AccountDto> findAllAccounts(@AuthenticationPrincipal UserMain userMain){
         return service.findAllByUser(userMain.getUser().getId());
     }
 
     @GetMapping("/{accountId}")
-    public AccountDto findByIdAndUser(@PathVariable Long accountId, @AuthenticationPrincipal UserMain userMain){
+    public AccountDto findAccount(@PathVariable Long accountId, @AuthenticationPrincipal UserMain userMain){
         return service.findByIdAndUser(accountId, userMain.getUser().getId());
+    }
+
+    @GetMapping("/{accountId}/movements")
+    public List<AccountMovementDto> findMovements(@PathVariable Long accountId, @AuthenticationPrincipal UserMain userMain){
+        return service.findMovements(accountId, userMain.getUser().getId());
     }
 }

@@ -1,7 +1,6 @@
 package com.gr.aureabank.dtos;
 
-import com.gr.aureabank.enums.CurrencyEnum;
-import com.gr.aureabank.enums.TransactionStatusEnum;
+import com.gr.aureabank.enums.MovementTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TransactionDto {
+public class AccountMovementDto {
     private Long id;
+    private MovementTypeEnum type;
     private BigDecimal amount;
-    private CurrencyEnum currency;
-    private String description;
-    private TransactionStatusEnum status;
     private LocalDateTime createdAt;
 }

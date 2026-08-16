@@ -5,10 +5,9 @@ import com.gr.aureabank.dtos.TransferRequest;
 import com.gr.aureabank.security.UserMain;
 import com.gr.aureabank.services.TransactionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -18,6 +17,16 @@ public class TransactionController {
 
     public TransactionController(TransactionService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public List<TransactionDto> findAllByUser(@AuthenticationPrincipal UserMain userMain) {
+        return service.findAllByUser(userMain.getUser().getId());
+    }
+
+    @GetMapping("/{id}")
+    public TransactionDto findById(@PathVariable Long id, @AuthenticationPrincipal UserMain userMain) {
+        return service.findByIdAndUser(id, userMain.getUser().getId());
     }
 
     @PostMapping("/transfer")

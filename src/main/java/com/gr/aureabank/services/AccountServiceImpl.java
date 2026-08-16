@@ -1,7 +1,10 @@
 package com.gr.aureabank.services;
 
 import com.gr.aureabank.dtos.AccountDto;
+import com.gr.aureabank.dtos.AccountMovementDto;
 import com.gr.aureabank.entities.Account;
+import com.gr.aureabank.entities.AccountMovement;
+import com.gr.aureabank.repositories.AccountMovementRepository;
 import com.gr.aureabank.repositories.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,18 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository repository;
+    private final AccountMovementRepository accountMovementRepository;
 
-    public AccountServiceImpl(AccountRepository repository) {
+    public AccountServiceImpl(AccountRepository repository, AccountMovementRepository accountMovementRepository) {
         this.repository = repository;
+        this.accountMovementRepository = accountMovementRepository;
     }
 
     @Override
     public List<AccountDto> findAllByUser(Long id) {
-        return repository.findAllByUserId(id).stream().map(this::toAccountDto).collect(Collectors.toList());
+        return repository.findAllByUserId(id)
+                .stream().map(this::toAccountDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -30,12 +37,28 @@ public class AccountServiceImpl implements AccountService {
         return toAccountDto(account);
     }
 
+    @Override
+    public List<AccountMovementDto> findMovements(Long id, Long userId) {
+        return accountMovementRepository.findAllByAccountIdAndAccountUserId(id, userId)
+                .stream().map(this::toAccountMovementDto)
+                .collect(Collectors.toList());
+    }
+
     private AccountDto toAccountDto(Account account) {
-        AccountDto accountDto = new AccountDto();
-        accountDto.setId(account.getId());
-        accountDto.setBalance(account.getBalance());
-        accountDto.setCurrency(account.getCurrency());
-        accountDto.setStatus(account.getStatus());
-        return accountDto;
+        AccountDto dto = new AccountDto();
+        dto.setId(account.getId());
+        dto.setBalance(account.getBalance());
+        dto.setCurrency(account.getCurrency());
+        dto.setStatus(account.getStatus());
+        return dto;
+    }
+
+    private AccountMovementDto toAccountMovementDto(AccountMovement account) {
+        AccountMovementDto dto = new AccountMovementDto();
+        dto.setAmount(account.getAmount());
+        dto.setCreatedAt(account.getCreatedAt());
+        dto.setId(account.getId());
+        dto.setType(account.getType());
+        return dto;
     }
 }
